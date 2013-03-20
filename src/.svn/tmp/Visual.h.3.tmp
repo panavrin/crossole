@@ -1,0 +1,123 @@
+#ifndef _VISUAL_H
+#define _VISUAL_H
+
+#include "ofMain.h"
+
+
+#include <stdlib.h>
+#include "oscKinectGestures.h"
+#include "Instrument.h"
+
+#ifdef __MACOSX_CORE__
+// note: for mac only
+#include <GLUT/glut.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+
+#endif
+// crossole classes 
+<<<<<<< .mine
+
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 768
+#define HIGHLEVEL_Z 100
+#define LOWLEVEL_Z 0
+#define ROTATE_UNIT 10
+
+=======
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 768
+#define HIGHLEVEL_Z 100
+#define LOWLEVEL_Z 0
+#define ROTATE_UNIT 10
+>>>>>>> .r36
+class Visual : public ofBaseApp{
+	
+public:
+	void setup();
+	void update();
+	void draw();
+	~Visual();
+	void keyPressed  (int key);
+	void keyReleased(int key);
+	void mouseMoved(int x, int y );
+	void mouseDragged(int x, int y, int button);
+	void mousePressed(int x, int y, int button);
+	void mouseReleased(int x, int y, int button);
+	void windowResized(int w, int h);
+	void drawString( GLfloat x, GLfloat y, GLfloat z, string str, GLfloat scale);
+	void createBlock();
+<<<<<<< .mine
+	void DrawCursors();
+	
+	
+	private : 
+=======
+private : 
+	int m_screenW;
+	int m_screenH;
+>>>>>>> .r36
+	int m_screenW;
+	int m_screenH;
+	float m_centerX;
+	float m_centerY;
+	// rotate view 
+	float m_counterX ;
+	float m_counterY ;
+	float m_counterZ ;
+	int m_counter;
+	// targetCounter
+	float m_tCounterX ;
+	float m_tCounterY ;
+	float m_tCounterZ ;
+	// mosue position when pressed
+	bool m_mousePressed_;
+	bool m_grabbedCreatedBlock;
+	int m_mouseX;
+	int m_mouseY;
+	bool DEBUG;
+	
+<<<<<<< .mine
+	bool m_switchAxis;
+=======
+	bool m_switchAxis;
+	//bool block created
+>>>>>>> .r36
+	bool m_blockCreated;
+	bool m_CPressed;
+	void initialize_graphics();
+	float distance(float x1, float y1, float x1, float x2);
+	void drawCreatedBlock(Block * block);
+	void drawChordBookNear(Block* block);
+	void drawInstrument();
+	void setupPerspective();
+	bool m_fullscreen;
+	int m_pressedKey;
+	ofTrueTypeFont m_font;
+<<<<<<< .mine
+	
+	Block * m_createdBlock;
+	int m_foundRow, m_foundCol;
+	int m_inc;
+	
+=======
+	
+	Block * m_createdBlock;
+	int m_foundRow, m_foundCol;
+	int m_inc;
+
+>>>>>>> .r36
+<<<<<<< .mine
+	//	Instrument m_instrument;	
+	Instrument * m_inst;	
+=======
+	Instrument * m_inst;	
+>>>>>>> .r36
+	oscKinectGestures kinectListener;
+	
+	// Demo Function
+	void GestureDetect();
+};
+#endif

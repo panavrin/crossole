@@ -1,0 +1,382 @@
+/*
+ *  oscKinectGestures.cpp
+ *  crossole
+ *
+ *  Created by Akito on 2/9/11.
+ *  Copyright 2011 __MyCompanyName__. All rights reserved.
+ *
+ */
+
+#include "oscKinectGestures.h"
+
+oscKinectGestures::oscKinectGestures()
+{
+}
+
+oscKinectGestures::~oscKinectGestures()
+{
+}
+
+// initializations that were not done in constructor
+void oscKinectGestures::setup()
+{
+	block_create = false;
+	oscKinectListener.setup();
+}
+
+// Calls oscKinectListener.update() and does smoothing
+void oscKinectGestures::update()
+{
+	oscKinectListener.update();
+}
+
+bool oscKinectGestures::DetectSnap(unsigned int bodyPart, unsigned int dimension, float relativeThreshold, bool* GlobalGestureBool)
+{
+	if (DetectStretch(bodyPart, dimension, relativeThreshold))
+	{
+		*GlobalGestureBool = true;
+		return false;
+	}
+	else 
+	{
+		if (*GlobalGestureBool) 
+		{
+			*GlobalGestureBool = false;
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
+	}
+}
+
+bool oscKinectGestures::MoveInto(unsigned int dimension, float relativeThreshold)
+{
+	// Works on torso absolute coords always
+	if (relativeThreshold >= 0)
+	{
+		if (oscKinectListener.Coords[TORSO][dimension] > relativeThreshold)
+			return true;
+		else
+			return false;
+	}
+	else {
+		if (oscKinectListener.Coords[TORSO][dimension] < relativeThreshold)
+			return true;
+		else
+			return false;
+	}
+}
+
+
+bool oscKinectGestures::DetectStretch(unsigned int bodyPart, unsigned int dimension, float relativeThreshold)
+{
+	double Hand = 0;
+	
+	// Stretch to the right OR DOWN or BACK
+	if (relativeThreshold > 0)
+	{
+		if ((bodyPart < NUM_JOINTS) && (dimension < NUM_DIMENSIONS))
+		{
+			// Normalize the arms
+			// In theory we should be normalizing everything, but no, only arms for now
+			if ((bodyPart == R_HAND) || (bodyPart == L_HAND))
+			{
+				// setup the normalization values
+				Hand = oscKinectListener.CoordsRel[bodyPart][dimension]/oscKinectListener.ArmLength;
+					
+				if (Hand > relativeThreshold)
+				{
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+			else
+			{
+				if ((oscKinectListener.CoordsRel[bodyPart][dimension]) > relativeThreshold)
+				{
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		}
+	}
+	else if (relativeThreshold < 0)
+	{
+		// Stretch to the LEFT OR UP OR FORWARD
+		if ((bodyPart < NUM_JOINTS) && (dimension < NUM_DIMENSIONS))
+		{
+			// Normalize the arms
+			// In theory we should be normalizing everything, but no, only arms for now
+			if ((bodyPart == R_HAND) || (bodyPart == L_HAND))
+			{
+				Hand = oscKinectListener.CoordsRel[bodyPart][dimension]/oscKinectListener.ArmLength;
+				
+				if (Hand < relativeThreshold)
+				{
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+			else
+			{
+				if ((oscKinectListener.CoordsRel[bodyPart][dimension]) < relativeThreshold)
+				{
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		}
+	}
+}
+
+bool oscKinectGestures::DetectSwipe(unsigned int bodyPart, unsigned int dimension, float velocityThreshold)
+{
+	if (abs(oscKinectListener.CoordsVel[bodyPart][dimension]) > velocityThreshold) {
+		return true;
+	}
+	else {
+		return false;
+	}
+
+}
+
+int i = 0;
+
+// Draw all debug information - training guidelines
+void oscKinectGestures::draw()
+{
+	string buf;
+	char TempStr[100];
+	
+	// Draw RH and LF cursors
+	DrawCursors();
+	
+	if (MoveInto(Z_dim, 1.5))
+	{
+		// Draw training lines
+		DrawGuidelines();
+	}
+	else {
+		//DrawKeyboard();
+	}
+	
+	//sprintf(TempStr, "Arm Length: %.2f",oscKinectListener.ArmLength);
+	//ofDrawBitmapString(TempStr, 800, 30);
+	
+	//sprintf(TempStr, "Right Hand: %.2f", oscKinectListener.CoordsRel[R_HAND][X_dim]);
+	//ofDrawBitmapString(TempStr, 800, 50);
+	//ofSetColor(255, 255, 255);
+
+	//sprintf(TempStr, "Left Hand: %.2f", oscKinectListener.CoordsRel[L_HAND][X_dim]);
+	//ofDrawBitmapString(TempStr, 100, 50);
+	//ofSetColor(255, 255, 255);
+	
+	/*
+	for (int i = 0; i < NUM_JOINTS; i++)
+	{
+		buf = ofToString(i, 2) + " --> X:" + ofToString(oscKinectListener.CoordsRel[i][0], 2) + " Y:" + ofToString(oscKinectListener.CoordsRel[i][1], 2) + " Z:" + ofToString(oscKinectListener.CoordsRel[i][2], 2); 
+		ofDrawBitmapString( buf, 20, 500 + 12*i );
+	}
+	 */
+}
+
+//--------------------------------------------------------------
+void oscKinectGestures::DrawCursors()
+{
+	// Draw a red square for RH
+	ofSetColor(200, 100, 100, 255);
+	ofFill();
+//	ofCircle(oscKinectListener.CoordsRel[R_HAND][X_dim]*SCREEN_WIDTH+SCREEN_WIDTH/2, oscKinectListener.CoordsRel[R_HAND][Y_dim]*SCREEN_HEIGHT+SCREEN_HEIGHT/2, -oscKinectListener.CoordsRel[R_HAND][Z_dim]*50);
+	ofCircle(oscKinectListener.CoordsRel[R_HAND][X_dim]*SCREEN_WIDTH+SCREEN_WIDTH/2, oscKinectListener.CoordsRel[R_HAND][Y_dim]*SCREEN_HEIGHT+SCREEN_HEIGHT/2, 10);
+	
+	// At all times, show a green square for left hand
+	ofSetColor(100, 200, 100, 255);
+	ofFill();
+	ofCircle(oscKinectListener.CoordsRel[L_HAND][X_dim]*SCREEN_WIDTH+SCREEN_WIDTH/2, oscKinectListener.CoordsRel[L_HAND][Y_dim]*SCREEN_HEIGHT+SCREEN_HEIGHT/2, 10);
+}
+
+//--------------------------------------------------------------
+void oscKinectGestures::DrawGuidelines() {
+	
+	// Right hand guides in RED
+	
+	// 1. Right snap
+	ofSetColor(255, 0, 0, 75);
+	ofLine(0.6*oscKinectListener.ArmLength*SCREEN_WIDTH+SCREEN_WIDTH/2, 0, 0.6*oscKinectListener.ArmLength*SCREEN_WIDTH+SCREEN_WIDTH/2, SCREEN_HEIGHT);
+	
+	// 2. Left snap
+	ofLine(-0.2*oscKinectListener.ArmLength*SCREEN_WIDTH+SCREEN_WIDTH/2, 0, -0.2*oscKinectListener.ArmLength*SCREEN_WIDTH+SCREEN_WIDTH/2, SCREEN_HEIGHT);
+	
+	// 3. Up snap
+	ofLine(0, -0.4*oscKinectListener.ArmLength*SCREEN_HEIGHT+SCREEN_HEIGHT/2, SCREEN_WIDTH, -0.4*oscKinectListener.ArmLength*SCREEN_HEIGHT+SCREEN_HEIGHT/2);
+	
+	// 4. Down snap
+	ofLine(0, 0.2*oscKinectListener.ArmLength*SCREEN_HEIGHT+SCREEN_HEIGHT/2, SCREEN_WIDTH, 0.2*oscKinectListener.ArmLength*SCREEN_HEIGHT+SCREEN_HEIGHT/2);
+	
+	// 5. Z-threshold
+	ofNoFill();
+	ofCircle(oscKinectListener.CoordsRel[R_HAND][X_dim]*SCREEN_WIDTH+SCREEN_WIDTH/2, oscKinectListener.CoordsRel[R_HAND][Y_dim]*SCREEN_HEIGHT+SCREEN_HEIGHT/2, 0.3*-oscKinectListener.ArmLength*50);
+	
+	// Left hand guides in GREEN
+	ofSetColor(0, 255, 0, 75);
+	
+	// 1. Right snap
+	ofLine(0.01*oscKinectListener.ArmLength*SCREEN_WIDTH+SCREEN_WIDTH/2, 0, 0.01*oscKinectListener.ArmLength*SCREEN_WIDTH+SCREEN_WIDTH/2, SCREEN_HEIGHT);
+	
+	// 2. Left snap
+	ofLine(-0.5*oscKinectListener.ArmLength*SCREEN_WIDTH+SCREEN_WIDTH/2, 0, -0.5*oscKinectListener.ArmLength*SCREEN_WIDTH+SCREEN_WIDTH/2, SCREEN_HEIGHT);
+	
+	// 3. Up snap
+		ofLine(0, -0.4*oscKinectListener.ArmLength*SCREEN_HEIGHT+SCREEN_HEIGHT/2, SCREEN_WIDTH, -0.4*oscKinectListener.ArmLength*SCREEN_HEIGHT+SCREEN_HEIGHT/2);
+	
+	// 4. Down snap
+		ofLine(0, 0.2*oscKinectListener.ArmLength*SCREEN_HEIGHT+SCREEN_HEIGHT/2, SCREEN_WIDTH, 0.2*oscKinectListener.ArmLength*SCREEN_HEIGHT+SCREEN_HEIGHT/2);
+}
+
+
+void oscKinectGestures::DrawKeyboard()
+{
+	float coord = -1;
+	
+	if (DetectStretch(R_HAND, Z_dim, -0.3))
+	{
+		coord = GetCoords(R_HAND, X_dim)*SCREEN_WIDTH+SCREEN_WIDTH/2;
+	}
+	
+	if (DetectStretch(L_HAND, Z_dim, -0.3)) {
+		coord = GetCoords(L_HAND, X_dim)*SCREEN_WIDTH+SCREEN_WIDTH/2;
+	}
+	
+	ofSetColor(255, 0, 0, 150);
+	
+	// Draw 11 lines equal distances apart
+	for (int i = 1; i <= 12; i++)
+	{
+		ofLine(i*SCREEN_WIDTH/12, 0, i*SCREEN_WIDTH/12, SCREEN_HEIGHT);
+		// Set color
+		
+			if ((coord > (i-1)*SCREEN_WIDTH/12) && (coord < i*SCREEN_WIDTH/12))
+			{
+			// Highlight note
+			ofRect((i-1)*SCREEN_WIDTH/12, 0, SCREEN_WIDTH/12, SCREEN_HEIGHT);
+		}
+		
+		i = i-1;
+		
+		switch (i) {
+			case 0:
+				ofDrawBitmapString("C", i*SCREEN_WIDTH/12 + 30, SCREEN_HEIGHT/2);
+				break;
+			case 1:
+				ofDrawBitmapString("C#", i*SCREEN_WIDTH/12 + 30, SCREEN_HEIGHT/2);
+				break;
+			case 2:
+				ofDrawBitmapString("D", i*SCREEN_WIDTH/12 + 30, SCREEN_HEIGHT/2);
+				break;
+			case 3:
+				ofDrawBitmapString("Eb", i*SCREEN_WIDTH/12 + 30, SCREEN_HEIGHT/2);
+				break;
+			case 4:
+				ofDrawBitmapString("E", i*SCREEN_WIDTH/12 + 30, SCREEN_HEIGHT/2);
+				break;
+			case 5:
+				ofDrawBitmapString("F", i*SCREEN_WIDTH/12 + 30, SCREEN_HEIGHT/2);
+				break;
+			case 6:
+				ofDrawBitmapString("F#", i*SCREEN_WIDTH/12 + 30, SCREEN_HEIGHT/2);
+				break;
+			case 7:
+				ofDrawBitmapString("G", i*SCREEN_WIDTH/12 + 30, SCREEN_HEIGHT/2);
+				break;
+			case 8:
+				ofDrawBitmapString("Ab", i*SCREEN_WIDTH/12 + 30, SCREEN_HEIGHT/2);
+				break;
+			case 9:
+				ofDrawBitmapString("A", i*SCREEN_WIDTH/12 + 30, SCREEN_HEIGHT/2);
+				break;
+			case 10:
+				ofDrawBitmapString("Bb", i*SCREEN_WIDTH/12 + 30, SCREEN_HEIGHT/2);
+				break;
+			case 11:
+				ofDrawBitmapString("B", i*SCREEN_WIDTH/12 + 30, SCREEN_HEIGHT/2);
+				break;
+			default:
+				break;
+		}
+		
+		i = i+1;
+	}
+}
+
+
+double oscKinectGestures::GetCoords(int bodyPart, int dimension)
+{
+	return oscKinectListener.CoordsRel[bodyPart][dimension];
+}
+
+double oscKinectGestures::GetAbsCoords(int bodyPart, int dimension)
+{
+	return oscKinectListener.Coords[bodyPart][dimension];
+}
+
+
+/* NOTE: NOT USING SMOOTHING FOR NOW
+ 
+// Takes a running average of the coords
+void oscKinectGestures::SmoothCoords()
+{
+	
+	// Update to the new value
+	for (int i = 0; i < NUM_JOINTS; i++) {
+		for (int j = 0; j < NUM_DIMENSIONS; j++) {
+			// Reset coords smooth
+			CoordsSmooth[i][j] = 0;
+			for (int k = 0; k < INERTIA; k++) {
+				CoordsSmooth[i][j] += (float)(1/INERTIA) * Coords[i][j][k];
+			}
+		}
+	}
+}
+
+void oscKinectGestures::GetRelatives()
+{
+	// Update to the new value
+	for (int i = 0; i < NUM_JOINTS; i++) {
+		for (int j = 0; j < NUM_DIMENSIONS; j++) {
+				CoordsRel[i][j] = CoordsSmooth[i][j] - CoordsSmooth[TORSO][j];
+		}
+	}
+}
+
+void oscKinectGestures::GetVelocities()
+{
+	for (int i = 0; i < NUM_JOINTS; i++) {
+		for (int j = 0; j < NUM_DIMENSIONS; j++) {
+			CoordsVel[i][j] = CoordsRel[i][j] - CoordsRelPrev[i][j];
+			CoordsRelPrev[i][j] = CoordsRel[i][j];
+		}
+	}
+}
+
+void oscKinectGestures::GetAccelerations()
+{
+	// Acceleration is the difference in velocity
+	for (int i = 0; i < NUM_JOINTS; i++) {
+		for (int j = 0; j < NUM_DIMENSIONS; j++) {
+			CoordsAccn[i][j] = CoordsVel[i][j] - CoordsVelPrev[i][j];
+			CoordsVelPrev[i][j] = CoordsVel[i][j];
+		}
+	}
+}
+
+*/

@@ -1,0 +1,68 @@
+#ifndef _VISUAL_H
+#define _VISUAL_H
+
+#include "ofMain.h"
+#include "ofTrueTypeFont.h"
+#include "oscKinectGestures.h"
+#include "Instrument.h"
+
+#ifdef __MACOSX_CORE__
+// note: for mac only
+#include <GLUT/glut.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+
+#endif
+// crossole classes 
+
+#define SCREENWIDTH 1024
+#define SCREENHEIGHT 768
+
+
+class Visual : public ofBaseApp{
+	
+public:
+	void setup();
+	void update();
+	void draw();
+	
+	void keyPressed  (int key);
+	void keyReleased(int key);
+	void mouseMoved(int x, int y );
+	void mouseDragged(int x, int y, int button);
+	void mousePressed(int x, int y, int button);
+	void mouseReleased(int x, int y, int button);
+	void windowResized(int w, int h);
+	void drawString( GLfloat x, GLfloat y, GLfloat z, string str, GLfloat scale);
+	void createBlock();
+	private : 
+	float m_centerX;
+	float m_centerY;
+	// rotate view 
+	float m_counterX ;
+	float m_counterY ;
+	float m_counterZ ;
+	// targetCounter
+	float m_tCounterX ;
+	float m_tCounterY ;
+	float m_tCounterZ ;
+	// mosue position when pressed
+	bool m_mousePressed_;
+	int m_mouseX;
+	int m_mouseY;
+	int m_inc;
+	
+	//bool block created
+	bool m_blockCreated;
+	void initialize_graphics();
+	bool m_fullscreen;
+	int m_pressedKey;
+	
+	//	Instrument m_instrument;	
+	Instrument * inst;
+	
+	oscKinect kinectListener;
+};
+#endif

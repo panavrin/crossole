@@ -1,0 +1,285 @@
+#include "Visual.h"
+
+bool r_hand_in = false;
+bool l_hand_in = false;
+//--------------------------------------------------------------
+void Visual::setup(){
+	// make some chagnes! Sertan
+	kinectListener.setup();
+	//	ofAppBaseWindow * test = new ofAppBaseWindow();
+	//	ofSetupOpenGL(test, SCREENWIDTH, SCREENHEIGHT, GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	int screenW = ofGetScreenWidth();
+	int screenH = ofGetScreenHeight();
+	int l;
+	m_counter = 100;
+	m_tCounterX = 	m_tCounterY = 	m_tCounterZ = m_counterX = m_counterY = m_counterZ  = 0;
+	m_blockCreated = false;
+	m_mousePressed_ = false;
+	m_mouseX = m_centerX = SCREENWIDTH / 2;
+	m_mouseY = m_centerY = SCREENHEIGHT / 2;
+	ofSetWindowPosition(screenW/2-(int)m_centerX, screenH/2 - (int)m_centerY);
+	ofSetFrameRate(60);
+	ofBackground(0,0,0);	
+	m_CPressed = false;
+	
+	//	Instrument m_instrument;
+	
+	inst = new Instrument();
+	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+
+}
+
+
+//--------------------------------------------------------------
+void Visual::update(){
+	
+	kinectListener.update();
+	
+	if (kinectListener.DetectSnap(R_HAND, 1, 1))
+	{
+		m_blockCreated = !m_blockCreated;
+	}
+	
+}
+
+
+void Visual::blockCreated(){
+	Block * block = inst->getLastBlock();
+	block->setPoint(SCREENWIDTH*kinectListener.CoordsRel[R_HAND][0], SCREENHEIGHT*kinectListener.CoordsRel[R_HAND][1]+384, -100 + 0*kinectListener.CoordsRel[R_HAND][2]);
+	block->setPoint(m_mouseX, m_mouseY, 0);
+	ofPushMatrix();
+	
+	// AVI
+	
+<<<<<<< .mine
+=======
+	glTranslatef(block->getPointX(), block->getPointY(), block->getPointZ());
+	
+>>>>>>> .r28
+<<<<<<< .mine
+	if ( m_blockCreated )
+	{
+		Block * block = inst->getLastBlock();
+		
+		// extend HAND TO ROTATE
+		
+		if (kinectListener.DetectSwipe(R_HAND, 0, 0.15))
+		{
+				m_tCounterY =m_tCounterY - 90;
+				m_counter --;
+		}
+		
+		if (kinectListener.DetectSnap(L_HAND, 0, 1))
+		{
+				m_tCounterY =m_tCounterY + 90;
+				m_counter ++;
+		}
+		
+		if (kinectListener.DetectSnap(R_HAND, 2, 0.4))
+		{
+			m_CPressed = !m_CPressed;
+		}
+		
+		if (! m_CPressed)		
+			block->setPoint(500, 500, -100 + 0*0.5);
+		else 
+			block->setPoint(m_mouseX, m_mouseY, 0);
+		
+		glPushMatrix();
+				
+		// AVI
+		
+		glTranslatef(block->getPointX(), block->getPointY(), block->getPointZ() + 50);
+		
+		// AVI		
+		if ( m_tCounterY > m_counterY ) 
+			m_counterY += 10;
+		else if ( m_tCounterY < m_counterY ) 
+			m_counterY -= 10;
+		if ( m_tCounterX > m_counterX ) 
+			m_counterX += 10;
+		else if ( m_tCounterX < m_counterX) 
+			m_counterX -= 10;
+		
+		glRotatef(m_counterX, 1, 0, 0);
+		glRotatef(m_counterY, 0, 1, 0);
+		glRotatef(m_counterZ, 0, 0, 1);
+		ofSetColor(255,100,255,255);
+		glutWireCube(block->getSize()+2);
+		ofSetColor(100,0,100,150);
+		glutSolidCube(block->getSize());
+		
+		char buffer [3];
+		sprintf(buffer, "%d", m_pressedKey);
+		glLineWidth(2.0);
+
+		ofSetColor(255,0,100,255);	
+		
+		drawString(-10,0,50,buffer,1);
+		
+		glPopMatrix();
+		glPushMatrix();
+		glTranslatef(block->getPointX(), block->getPointY() + 40, block->getPointZ() + 50);
+		string chord[5] = {"Am", "G", "D", "C", "Em"};
+		if ( m_CPressed)
+=======
+	// AVI		
+	if ( m_tCounterY > m_counterY ) 
+		m_counterY += 10;
+	else if ( m_tCounterY < m_counterY ) 
+		m_counterY -= 10;
+	if ( m_tCounterX > m_counterX ) 
+		m_counterX += 10;
+	else if ( m_tCounterX < m_counterX) 
+		m_counterX -= 10;
+	
+	ofRotateX(m_counterX);
+	ofRotateY(m_counterY);
+	ofRotateZ(m_counterZ);
+	ofSetColor(255,100,255,255);
+	glutWireCube(block->getSize()+2);
+	ofSetColor(100,0,100,150);
+	glutSolidCube(block->getSize());
+	
+	char buffer [3];
+	sprintf(buffer, "%d", m_pressedKey);
+	glLineWidth(2.0);
+	
+	ofSetColor(255,0,100,255);	
+	
+	drawString(-10,0,50,buffer,1);
+	
+	ofPopMatrix();
+	ofPushMatrix();
+	float blockX = block->getPointX();
+	float blockY =  block->getPointY();
+	float blockZ = block->getPointZ();
+	ofTranslate(block->getPointX(), block->getPointY() + 40, block->getPointZ());
+	string chord[5] = {"Am", "G", "D", "C", "Em"};
+	if ( m_CPressed)
+>>>>>>> .r28
+		for (int i = 0; i < 5 ; i++ ) {
+			int k = (i + m_counter ) %5; // r abs((i + (m_counter%5))%5);
+			float pos = -2* block->getSize() + i * block->getSize() ;
+			ofTranslate(  pos  , 0 , 0 );
+			ofSetColor(30,30,30,125 + 255 * - 0.25 * ( abs(i - 2) - 2) );	
+			ofRect(0 - block->getSize()/2,0,block->getSize(), block->getSize());
+			ofSetColor(0x000000);
+			ofSetColor(100,100,100,125 + 255 * - 0.25 * ( abs(i - 2) - 2));	
+			m_font.loadFont("verdana.ttf",  block->getSize()/3);
+			m_font.drawString(chord[k], 0- block->getSize()/2 + 5,0 + block->getSize()/2);
+			ofSetColor(0xff3399);
+			ofTranslate( - pos , 0 , 0 );
+		}
+	ofPopMatrix();
+	ofSetColor(255,255,255,255);	
+	
+}
+//--------------------------------------------------------------
+void Visual::draw(){
+	glRotatef( m_inc, 0.0f, 1.0f, 0.0f );
+
+	kinectListener.draw();
+	
+	GLfloat ambientLight[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+	
+	if (kinectListener.CoordsRel[L_HAND][0] < -1)
+	{
+		m_blockCreated = !m_blockCreated;
+	}
+<<<<<<< .mine
+
+=======
+	
+	if ( m_blockCreated )
+		blockCreated();
+
+>>>>>>> .r28
+	ofDrawBitmapString("(a) on screen", 150,200);
+	
+	/*
+	
+	 */		
+}
+
+//--------------------------------------------------------------
+void Visual::keyPressed(int key){
+	m_pressedKey = key;
+	if ( key == 358) 
+	{	m_tCounterY =(m_tCounterY + 90);
+		if ( m_tCounterY >=360 )
+		{	
+			m_tCounterY -= 360;
+			m_counterY -= 360;
+		}
+		m_counter --;
+	}
+	else if ( key  == 356 ) 
+	{
+		m_tCounterY =(m_tCounterY - 90);
+		m_counter ++;
+		if ( m_tCounterY <360 )
+		{	
+			m_tCounterY += 360;
+			m_counterY += 360;
+		}
+	}
+	else if ( key == 357 )
+		m_tCounterX =(m_tCounterX + 90);
+	else if (key == 359) 
+		m_tCounterX =(m_tCounterX - 90);
+	else if (key == 99)
+		m_blockCreated = true;
+	else if (key == 32)
+		m_CPressed = true;
+}
+
+//--------------------------------------------------------------
+void Visual::keyReleased(int key){
+}
+
+//--------------------------------------------------------------
+void Visual::mouseMoved(int x, int y ){
+	
+}
+
+//--------------------------------------------------------------
+void Visual::mouseDragged(int x, int y, int button){
+	m_mouseX = x;
+	m_mouseY = y;
+}
+
+//--------------------------------------------------------------
+void Visual::mousePressed(int x, int y, int button){
+	m_mousePressed_= true;
+}
+
+//--------------------------------------------------------------
+void Visual::mouseReleased(int x, int y, int button){
+	
+}
+
+//--------------------------------------------------------------
+void Visual::windowResized(int w, int h){
+	
+}
+
+void Visual::drawString( GLfloat x, GLfloat y, GLfloat z, string str, GLfloat scale = 1.0f )
+{
+    GLint len = str.length(), i;
+	// line width
+	
+	// glPushMatrix();
+    glTranslatef( x, y, z );
+    glScalef( .001f * scale, .001f * scale, .001f * scale );
+  	ofDrawBitmapString(str, 0,0);
+	glTranslatef(- x, -y, -z );
+	
+	//   glPopMatrix();
+}
+
+void Visual::createBlock()
+{
+	
+}

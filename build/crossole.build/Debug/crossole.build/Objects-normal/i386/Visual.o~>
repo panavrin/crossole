@@ -1,0 +1,7 @@
+/Users/gilweinberg/Desktop/kinect/of_preRelease_v0062_osxSL_FAT/apps/examples/crossole/src/Visual.cpp:7: error: stray '\302' in program
+/Users/gilweinberg/Desktop/kinect/of_preRelease_v0062_osxSL_FAT/apps/examples/crossole/src/Visual.cpp:7: error: stray '\240' in program
+/Users/gilweinberg/Desktop/kinect/of_preRelease_v0062_osxSL_FAT/apps/examples/crossole/src/Visual.cpp:8: error: expected constructor, destructor, or type conversion before 'bool'
+/Users/gilweinberg/Desktop/kinect/of_preRelease_v0062_osxSL_FAT/apps/examples/crossole/src/Visual.cpp: In member function 'void Visual::GestureDetect()':
+/Users/gilweinberg/Desktop/kinect/of_preRelease_v0062_osxSL_FAT/apps/examples/crossole/src/Visual.cpp:747: error: 'LHSnapRight' was not declared in this scope
+/Users/gilweinberg/Desktop/kinect/of_preRelease_v0062_osxSL_FAT/apps/examples/crossole/src/Visual.cpp:749: error: 'LHSnapRight' was not declared in this scope
+/Users/gilweinberg/Desktop/kinect/of_preRelease_v0062_osxSL_FAT/apps/examples/crossole/src/Visual.cpp:752: error: 'LHSnapRight' was not declared in this scope

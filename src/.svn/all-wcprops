@@ -1,0 +1,125 @@
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/79/trunk/crossole/src
+END
+Route.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/80/trunk/crossole/src/Route.cpp
+END
+Block.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/85/trunk/crossole/src/Block.h
+END
+PlayCursor.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/86/trunk/crossole/src/PlayCursor.cpp
+END
+Visual.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/90/trunk/crossole/src/Visual.cpp
+END
+Route.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/76/trunk/crossole/src/Route.h
+END
+oscKinectGestures.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/80/trunk/crossole/src/oscKinectGestures.cpp
+END
+PlayCursor.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/86/trunk/crossole/src/PlayCursor.h
+END
+Instrument.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/86/trunk/crossole/src/Instrument.cpp
+END
+Visual.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/87/trunk/crossole/src/Visual.h
+END
+oscKinectGestures.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/63/trunk/crossole/src/oscKinectGestures.h
+END
+ChordBook.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/84/trunk/crossole/src/ChordBook.cpp
+END
+Instrument.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/83/trunk/crossole/src/Instrument.h
+END
+ChordBook.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/82/trunk/crossole/src/ChordBook.h
+END
+Constants.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/86/trunk/crossole/src/Constants.h
+END
+oscKinect.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/80/trunk/crossole/src/oscKinect.cpp
+END
+main.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/84/trunk/crossole/src/main.cpp
+END
+Grid.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/23/trunk/crossole/src/Grid.cpp
+END
+oscKinect.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/52/trunk/crossole/src/oscKinect.h
+END
+Grid.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/23/trunk/crossole/src/Grid.h
+END
+Block.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/89/trunk/crossole/src/Block.cpp
+END
